@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/tv_srno_bio"
+        android:layout_width="25dp"
+        android:layout_height="wrap_content"
+        android:text="#"
+        android:textStyle="bold"
+        style="@style/rowTextStyle"/>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@android:color/darker_gray"/>
+
+    <TextView
+        android:id="@+id/tv_crop_bio"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="Crop"
+        style="@style/rowTextStyle"
+        android:textStyle="bold"/>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@android:color/darker_gray"/>
+
+    <TextView
+        android:id="@+id/tv_spCode_bio"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:text="SP Code"
+        style="@style/rowTextStyle"/>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@android:color/darker_gray"/>
+
+    <TextView
+        android:id="@+id/tv_variety_bio"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="Variety"
+        android:textStyle="bold"
+        style="@style/rowTextStyle"/>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@android:color/darker_gray"/>
+
+    <TextView
+        android:id="@+id/tv_lotno_bio"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:text="Lot No."
+        style="@style/rowTextStyle"/>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@android:color/darker_gray"/>
+
+    <TextView
+        android:id="@+id/tv_sampleNo_bio"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="Sample No."
+        android:textStyle="bold"
+        style="@style/rowTextStyle"/>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@android:color/darker_gray"/>
+
+    <TextView
+        android:id="@+id/tv_ad_bio"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:text="Arrival Date"
+        style="@style/rowTextStyle"/>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@android:color/darker_gray"/>
+
+    <TextView
+        android:id="@+id/tv_dos_bio"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="DOS"
+        style="@style/rowTextStyle"
+        android:textStyle="bold"/>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@android:color/darker_gray"/>
+
+    <TextView
+        android:id="@+id/tv_trd_bio"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:text="TRD"
+        style="@style/rowTextStyle"/>
+
+</LinearLayout>

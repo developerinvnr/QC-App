@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_qc_app_icon"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_qc_app_icon"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".got.GOTFinalSubmitActivity"
+            android:exported="false" />
+        <activity
+            android:name=".got.ReviewAndFinalSubmitActivity"
+            android:exported="false" />
+        <activity
+            android:name=".germination.SyncOfflineDataToServerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".germination.OfflineFGTDataUpdateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".germination.OfflineDataListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".germination.ImageUploadActivity"
+            android:exported="false" />
+        <activity
+            android:name=".got.BioTechTestInitiativeReport"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".got.GOTObservationPendingReport"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".got.TransplantingPendingReportActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".got.ReportHomeActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".got.ReportSummeryActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".got.SowingPendingReportActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity android:name=".dencity.DencityReadingFormActivity" />
+        <activity android:name=".dencity.DencityHomeActivity" />
+        <activity android:name=".bts_seedling.BTSSeedlingDispatchFormActivity" />
+        <activity android:name=".bts_seedling.BTSSeedlingDispatchHomeActivity" />
+        <activity android:name=".bts_seedling.FormBTSSeedlingActivity" />
+        <activity android:name=".bts_seedling.HomeBTSSeedlingActivity" />
+        <activity android:name=".got.GOTBajraFinalObservationActivity" />
+        <activity android:name=".got.GOTMaizeFinalObservationActivity" />
+        <activity android:name=".got.GOTPaddyFinalObservationActivity" />
+        <activity android:name=".got.GOTFieldMonitoringVisitActivity" />
+        <activity android:name=".got.GOTFinalObservationActivity" />
+        <activity android:name=".got.GOTTransplantingActivity" />
+        <activity android:name=".got.GOTPlantingActivity" />
+        <activity android:name=".got.GOTResultStepsActivity" />
+        <activity android:name=".got.SampleGOTResultHomeActivity" />
+        <activity android:name=".got.SampleReceiptUpdateActivity" />
+        <activity android:name=".got.SampleReceiptHomeActivity" />
+        <activity android:name=".germination.GerminationSetupActivity" />
+        <activity
+            android:name="com.journeyapps.barcodescanner.CaptureActivity"
+            android:screenOrientation="fullSensor"
+            tools:replace="screenOrientation" />
+        <activity android:name=".germination.GerminationReadingFormActivity" />
+        <activity android:name=".germination.GerminationHomeActivity" />
+        <activity android:name=".pp.PPReadingFormActivity" />
+        <activity android:name=".pp.PPHomeActivity" />
+        <activity android:name=".moisture.MoistureReadingFormActivity" />
+        <activity android:name=".moisture.MoistureHomeActivity" />
+        <activity android:name=".samplecollection.SampleCollectionUpdateActivity" />
+        <activity
+            android:name=".common.LoginActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".samplecollection.SampleCollectionHomeActivity" />
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar" />
+    </application>
+
+</manifest>

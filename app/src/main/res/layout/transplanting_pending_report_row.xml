@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/tv_srno_tp"
+        android:layout_width="25dp"
+        android:layout_height="wrap_content"
+        android:text="#"
+        android:textStyle="bold"
+        style="@style/rowTextStyle" />
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@android:color/darker_gray"/>
+
+    <TextView
+        android:id="@+id/tv_doa_tp"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="DOA"
+        android:textStyle="bold"
+        style="@style/rowTextStyle"/>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@android:color/darker_gray"/>
+
+    <TextView
+        android:id="@+id/tv_crop_tp"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="Crop"
+        android:textStyle="bold"
+        style="@style/rowTextStyle"/>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@android:color/darker_gray"/>
+
+    <TextView
+        android:id="@+id/tv_spCrop_tp"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="SP Code"
+        android:textStyle="bold"
+        style="@style/rowTextStyle"/>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@android:color/darker_gray"/>
+
+    <TextView
+        android:id="@+id/tv_variety_tp"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="Variety"
+        android:textStyle="bold"
+        style="@style/rowTextStyle"/>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@android:color/darker_gray"/>
+
+    <TextView
+        android:id="@+id/tv_lotno_tp"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="Lot No."
+        android:textStyle="bold"
+        style="@style/rowTextStyle"/>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@android:color/darker_gray"/>
+
+    <TextView
+        android:id="@+id/tv_sample_tp"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="Sample No."
+        style="@style/rowTextStyle"
+        android:textStyle="bold"/>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@android:color/darker_gray"/>
+
+    <TextView
+        android:id="@+id/tv_dos_tp"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="DOS"
+        android:textStyle="bold"
+        style="@style/rowTextStyle"/>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@android:color/darker_gray"/>
+
+    <TextView
+        android:id="@+id/tv_nl_tp"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="NL"
+        android:textStyle="bold"
+        style="@style/rowTextStyle"/>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@android:color/darker_gray"/>
+
+    <TextView
+        android:id="@+id/tv_bedno_tp"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="Bed No."
+        android:textStyle="bold"
+        style="@style/rowTextStyle"/>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@android:color/darker_gray"/>
+
+    <TextView
+        android:id="@+id/tv_treyno_tp"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="Trey No."
+        android:textStyle="bold"
+        style="@style/rowTextStyle"/>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@android:color/darker_gray"/>
+
+    <TextView
+        android:id="@+id/tv_nooftrey_tp"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="No. of Trey"
+        android:textStyle="bold"
+        style="@style/rowTextStyle"/>
+
+</LinearLayout>

@@ -1,0 +1,44 @@
+<resources>
+    <string name="app_name">SeedtracQC</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Quality</string>
+    <string name="nav_header_subtitle"></string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+
+    <string name="user_id">User ID</string>
+    <string name="password">Password</string>
+
+    <string name="confirm_alert">Are you sure you want to submit this data?</string>
+    <string name="hard_fug">Hard/FUG</string>
+    <string name="state">State</string>
+    <string name="got_data_update">GOT Data Update</string>
+    <string name="crop">Crop</string>
+    <string name="variety">Variety</string>
+    <string name="lot_no">Lot no.</string>
+    <string name="stage">Stage</string>
+    <string name="dosa">DOSA</string>
+    <string name="sample_no">Sample No.</string>
+    <string name="planting_sowing">Planting/Sowing</string>
+    <string name="location">Location</string>
+    <string name="date_of_sowing">Date of Sowing</string>
+    <string name="no_of_seeds">No. of Seeds</string>
+    <string name="plot_no">Plot No.</string>
+    <string name="bed_no">Bed No.</string>
+    <string name="number_of_rows">Number of rows</string>
+    <string name="number_of_cells_trey">Number of cells/trey</string>
+    <string name="number_of_trey_lot">Number of trey/lot</string>
+    <string name="transplanting">Transplanting</string>
+    <string name="date_of_transplanting">Date of Transplanting</string>
+    <string name="transplant_plot">Transplant Plot</string>
+    <string name="bts_seedling_string">BTS Seedling</string>
+    <string name="bts_seedling_dispatch">BTS Seedling Dispatch</string>
+    <string name="bts_seedling_submit">SUBMIT: Sample will be posted to BTS Seedling In-Progress List</string>
+    <string name="bts_seedlingdispatch_submit">SUBMIT: Sample will be posted to BTS Seedling Dispatch In-Progress List</string>
+    <string name="bts_seedling_back">BACK : Cancels the scanned sample and takes back for fresh scan</string>
+</resources>
