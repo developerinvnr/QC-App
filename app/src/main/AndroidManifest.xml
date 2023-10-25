@@ -24,6 +24,12 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".got.GOTMaizeFinalSubmitActivity"
+            android:exported="false" />
+        <activity
+            android:name=".got.GOTPaddyFinalSubmitActivity"
+            android:exported="false" />
+        <activity
             android:name=".got.GOTFinalSubmitActivity"
             android:exported="false" />
         <activity

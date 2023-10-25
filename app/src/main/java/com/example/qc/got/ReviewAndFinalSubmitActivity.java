@@ -286,9 +286,22 @@ public class ReviewAndFinalSubmitActivity extends AppCompatActivity implements D
     }
 
     public void viewSampleDetails(Samparray samparray) {
-        Intent intent = new Intent(ReviewAndFinalSubmitActivity.this, GOTFinalSubmitActivity.class);
-        intent.putExtra("sampleno", samparray.getSampleno());
-        startActivity(intent);
-        finish();
+        if (samparray.getCropname().equalsIgnoreCase("Paddy Seed")){
+            Intent intent = new Intent(ReviewAndFinalSubmitActivity.this, GOTPaddyFinalSubmitActivity.class);
+            intent.putExtra("sampleno", samparray.getSampleno());
+            startActivity(intent);
+            finish();
+        } else if (samparray.getCropname().equalsIgnoreCase("Maize Seed")) {
+            Intent intent = new Intent(ReviewAndFinalSubmitActivity.this, GOTMaizeFinalSubmitActivity.class);
+            intent.putExtra("sampleno", samparray.getSampleno());
+            startActivity(intent);
+            finish();
+        }else {
+            Intent intent = new Intent(ReviewAndFinalSubmitActivity.this, GOTFinalSubmitActivity.class);
+            intent.putExtra("sampleno", samparray.getSampleno());
+            startActivity(intent);
+            finish();
+        }
+
     }
 }

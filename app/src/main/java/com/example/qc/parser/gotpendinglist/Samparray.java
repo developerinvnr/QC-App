@@ -28,6 +28,9 @@ public class Samparray {
     @SerializedName("gppercentage")
     @Expose
     private Double gppercentage;
+    @SerializedName("cropname")
+    @Expose
+    private String cropname;
 
     public String getSampleno() {
         return sampleno;
@@ -91,5 +94,13 @@ public class Samparray {
 
     public void setGppercentage(Double gppercentage) {
         this.gppercentage = gppercentage;
+    }
+
+    public String getCropname() {
+        return cropname;
+    }
+
+    public void setCropname(String cropname) {
+        this.cropname = cropname;
     }
 }

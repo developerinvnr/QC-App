@@ -2,7 +2,6 @@ package com.example.qc.got;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -17,6 +16,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -28,7 +28,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.qc.R;
 import com.example.qc.adapter.FMV_Data;
+import com.example.qc.adapter.FMV_DataAdapter;
 import com.example.qc.parser.JsonParser;
+import com.example.qc.pojo.SampleGOTInfo;
 import com.example.qc.sharedpreference.SharedPreferences;
 import com.example.qc.utils.AppConfig;
 import com.example.qc.utils.CommonVolleyCall;
@@ -42,33 +44,46 @@ import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
-public class GOTFinalSubmitActivity extends AppCompatActivity {
-
+public class GOTMaizeFinalSubmitActivity extends AppCompatActivity {
     private ImageButton back_nav;
-    private TextView tv_sampleno,tv_crop,tv_variety,tv_lono,tv_stage,tv_dosa;
-    private String sampleno;
-
-    private EditText et_obrdatefinal,et_noofplants_final,et_maleplants,et_per_maleplants,et_femaleplants,et_per_femaleplants,
-            et_ooftypes,et_per_ooftypes,et_totalplants,et_per_totalplants,et_remark,et_retest_reason;
-    private String retest="No";
     private CheckBox checkBox_retest;
     private LinearLayout ll_retest_reason;
+    private EditText et_noofplants_final;
+    private EditText et_selfplants;
+    private EditText et_per_Selfplants;
+    private EditText et_maleplants;
+    private EditText et_per_maleplants;
+    private EditText et_pencilplants;
+    private EditText et_per_pencilplants;
+    private EditText et_ooftypes;
+    private EditText et_per_ooftypes;
+    private EditText et_total;
+    private EditText et_per_total;
+    private EditText et_obrdatefinal;
+    private EditText et_remark;
+    private EditText et_retest_reason;
+    private TextView tv_sampleno;
+    private Button btn_submit;
+    private String retest="No";
     private LinearLayout ll_withsample;
     private RadioGroup radiosample;
-    private Button btn_submit;
-    private EditText et_blinepollen;
-    private EditText et_per_blinepollen;
-    private LinearLayout ll_male,ll_male_per,ll_bline,ll_bline_per;
+    private LinearLayout ll_directblock;
+    private LinearLayout ll_nurseryblock;
+    private TextView tv_crop,tv_variety,tv_lono,tv_stage,tv_dosa;
+    private String sampleno;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_gotfinal_submit);
+        setContentView(R.layout.activity_gotmaize_final_submit);
         Objects.requireNonNull(getSupportActionBar()).hide();
         setTheme();
         init();
@@ -79,8 +94,27 @@ public class GOTFinalSubmitActivity extends AppCompatActivity {
         Utils.getInstance(getApplicationContext());
         Utils.getInstance().initConnectionDetector();
         back_nav = findViewById(R.id.back_nav);
+        checkBox_retest = findViewById(R.id.checkBox_retest);
+        ll_retest_reason = findViewById(R.id.ll_retest_reason);
+        ll_withsample = findViewById(R.id.ll_withsample);
+        radiosample = findViewById(R.id.radiosample);
 
         sampleno = getIntent().getStringExtra("sampleno");
+
+        et_noofplants_final = findViewById(R.id.et_noofplants_final);
+        et_selfplants = findViewById(R.id.et_selfplants);
+        et_per_Selfplants = findViewById(R.id.et_per_Selfplants);
+        et_maleplants = findViewById(R.id.et_maleplants);
+        et_per_maleplants = findViewById(R.id.et_per_maleplants);
+        et_ooftypes = findViewById(R.id.et_ooftypes);
+        et_per_ooftypes = findViewById(R.id.et_per_ooftypes);
+        et_pencilplants = findViewById(R.id.et_pencilplants);
+        et_per_pencilplants = findViewById(R.id.et_per_pencilplants);
+        et_total = findViewById(R.id.et_total);
+        et_per_total = findViewById(R.id.et_per_total);
+        et_obrdatefinal = findViewById(R.id.et_obrdatefinal);
+        et_remark = findViewById(R.id.et_remark);
+        et_retest_reason = findViewById(R.id.et_retest_reason);
 
         tv_crop = findViewById(R.id.tv_crop);
         tv_variety = findViewById(R.id.tv_variety);
@@ -88,47 +122,51 @@ public class GOTFinalSubmitActivity extends AppCompatActivity {
         tv_stage = findViewById(R.id.tv_stage);
         tv_dosa = findViewById(R.id.tv_dosa);
         tv_sampleno = findViewById(R.id.tv_sampleno);
-
         btn_submit = findViewById(R.id.btn_submit);
 
-        checkBox_retest = findViewById(R.id.checkBox_retest);
-        ll_retest_reason = findViewById(R.id.ll_retest_reason);
-        ll_withsample = findViewById(R.id.ll_withsample);
-        radiosample = findViewById(R.id.radiosample);
+        String date = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
+        et_obrdatefinal.setText(date);
 
-        et_obrdatefinal = findViewById(R.id.et_obrdatefinal);
-        et_noofplants_final = findViewById(R.id.et_noofplants_final);
-        et_maleplants = findViewById(R.id.et_maleplants);
-        et_per_maleplants = findViewById(R.id.et_per_maleplants);
-        et_femaleplants = findViewById(R.id.et_femaleplants);
-        et_per_femaleplants = findViewById(R.id.et_per_femaleplants);
-        et_blinepollen = findViewById(R.id.et_blinepollen);
-        et_per_blinepollen = findViewById(R.id.et_per_blinepollen);
-        et_ooftypes = findViewById(R.id.et_ooftypes);
-        et_per_ooftypes = findViewById(R.id.et_per_ooftypes);
-        et_totalplants = findViewById(R.id.et_totalplants);
-        et_per_totalplants = findViewById(R.id.et_per_totalplants);
-        et_remark = findViewById(R.id.et_remark);
-        et_retest_reason = findViewById(R.id.et_retest_reason);
-
-        ll_male = findViewById(R.id.ll_male);
-        ll_male_per = findViewById(R.id.ll_male_per);
-        ll_bline = findViewById(R.id.ll_bline);
-        ll_bline_per = findViewById(R.id.ll_bline_per);
     }
 
-    private void init(){
+    private void init() {
         back_nav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(GOTFinalSubmitActivity.this, ReviewAndFinalSubmitActivity.class);
+                Intent intent = new Intent(GOTMaizeFinalSubmitActivity.this, GOTResultStepsActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 finish();
             }
         });
+
         getSampleDetails();
 
         final DecimalFormat form = new DecimalFormat("#.##", new DecimalFormatSymbols(Locale.US));
+        et_selfplants.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                String selfplants = String.valueOf(charSequence);
+                String noofplants_final = et_noofplants_final.getText().toString().trim();
+                if (!noofplants_final.equals("") && !noofplants_final.equals("0") && selfplants.equals("")) {
+                    float selfplants1 = Float.parseFloat(selfplants);
+                    float noofplants_final1 = Float.parseFloat(noofplants_final);
+                    float selfplantsper = (selfplants1 * 100) / noofplants_final1;
+                    //int perround = Math.round(normalmeanper);
+                    et_per_Selfplants.setText(form.format(selfplantsper));
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
         et_maleplants.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -139,12 +177,12 @@ public class GOTFinalSubmitActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 String maleplants = String.valueOf(charSequence);
                 String noofplants_final = et_noofplants_final.getText().toString().trim();
-                if (!noofplants_final.equals("") && !noofplants_final.equals("0") && !maleplants.equals("")) {
+                if (!noofplants_final.equals("") && !noofplants_final.equals("0") && maleplants.equals("")) {
                     float maleplants1 = Float.parseFloat(maleplants);
                     float noofplants_final1 = Float.parseFloat(noofplants_final);
-                    float normalmeanper = (maleplants1 * 100) / noofplants_final1;
+                    float maleplantsper = (maleplants1 * 100) / noofplants_final1;
                     //int perround = Math.round(normalmeanper);
-                    et_per_maleplants.setText(form.format(normalmeanper));
+                    et_per_maleplants.setText(form.format(maleplantsper));
                 }
             }
 
@@ -153,8 +191,7 @@ public class GOTFinalSubmitActivity extends AppCompatActivity {
 
             }
         });
-
-        et_femaleplants.addTextChangedListener(new TextWatcher() {
+        et_pencilplants.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -162,14 +199,14 @@ public class GOTFinalSubmitActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                String femaleplants = String.valueOf(charSequence);
+                String pencilplants = String.valueOf(charSequence);
                 String noofplants_final = et_noofplants_final.getText().toString().trim();
-                if (!noofplants_final.equals("") && !noofplants_final.equals("0") && !femaleplants.equals("")) {
-                    float femaleplants1 = Float.parseFloat(femaleplants);
+                if (!noofplants_final.equals("") && !noofplants_final.equals("0") && pencilplants.equals("")) {
+                    float pencilplants1 = Float.parseFloat(pencilplants);
                     float noofplants_final1 = Float.parseFloat(noofplants_final);
-                    float femaleplantper = (femaleplants1 * 100) / noofplants_final1;
+                    float pencilplantsper = (pencilplants1 * 100) / noofplants_final1;
                     //int perround = Math.round(normalmeanper);
-                    et_per_femaleplants.setText(form.format(femaleplantper));
+                    et_per_pencilplants.setText(form.format(pencilplantsper));
                 }
             }
 
@@ -178,32 +215,6 @@ public class GOTFinalSubmitActivity extends AppCompatActivity {
 
             }
         });
-
-        et_blinepollen.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                String blinepollen = String.valueOf(charSequence);
-                String noofplants_final = et_noofplants_final.getText().toString().trim();
-                if (!noofplants_final.equals("") && !noofplants_final.equals("0") && !blinepollen.equals("")) {
-                    float blinepollen1 = Float.parseFloat(blinepollen);
-                    float noofplants_final1 = Float.parseFloat(noofplants_final);
-                    float blinepollenper = (blinepollen1 * 100) / noofplants_final1;
-                    //int perround = Math.round(normalmeanper);
-                    et_per_blinepollen.setText(form.format(blinepollenper));
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
-
         et_ooftypes.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -212,36 +223,24 @@ public class GOTFinalSubmitActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                String offtypesplants = String.valueOf(charSequence);
-                String femaleplants = et_femaleplants.getText().toString().trim();
+                String ooftypes = String.valueOf(charSequence);
+                String selfplants = et_selfplants.getText().toString().trim();
                 String maleplants = et_maleplants.getText().toString().trim();
-                String blinepollen = et_blinepollen.getText().toString().trim();
+                String pencilplants = et_pencilplants.getText().toString().trim();
                 String noofplants_final = et_noofplants_final.getText().toString().trim();
-                if (!noofplants_final.equals("") && !noofplants_final.equals("0") && !offtypesplants.equals("") && !femaleplants.equals("") && !maleplants.equals("")) {
-                    float offtypesplants1 = Float.parseFloat(offtypesplants);
-                    float femaleplants1 = Float.parseFloat(femaleplants);
+                if (!noofplants_final.equals("") && !noofplants_final.equals("0") && ooftypes.equals("")) {
+                    float ooftypes1 = Float.parseFloat(ooftypes);
+                    float selfplants1 = Float.parseFloat(selfplants);
                     float maleplants1 = Float.parseFloat(maleplants);
+                    float pencilplants1 = Float.parseFloat(pencilplants);
                     float noofplants_final1 = Float.parseFloat(noofplants_final);
-                    float offtypesplantper = (offtypesplants1 * 100) / noofplants_final1;
-                    //int perround = Math.round(normalmeanper);
-                    float total = 0;
-                    if (tv_crop.getText().toString().equalsIgnoreCase("Bajra Seed")){
-                        float blinepollen1 = Float.parseFloat(blinepollen);
-                        total = offtypesplants1+femaleplants1+blinepollen1;
-                    }else {
-                        total = offtypesplants1+femaleplants1+maleplants1;
-                    }
-
+                    float ooftypesper = (ooftypes1 * 100) / noofplants_final1;
+                    float total = selfplants1+maleplants1+pencilplants1+ooftypes1;
                     float totalper = (total * 100) / noofplants_final1;
-                    et_per_ooftypes.setText(form.format(offtypesplantper));
-                    et_totalplants.setText(String.valueOf(total));
-                    et_per_totalplants.setText(String.valueOf(totalper));
-
-                    float femaleplantper = (femaleplants1 * 100) / noofplants_final1;
-                    et_per_femaleplants.setText(form.format(femaleplantper));
-
-                    float normalmeanper = (maleplants1 * 100) / noofplants_final1;
-                    et_per_maleplants.setText(form.format(normalmeanper));
+                    //int perround = Math.round(normalmeanper);
+                    et_per_ooftypes.setText(form.format(ooftypesper));
+                    et_total.setText(String.valueOf(total));
+                    et_per_total.setText(form.format(totalper));
                 }
             }
 
@@ -250,55 +249,21 @@ public class GOTFinalSubmitActivity extends AppCompatActivity {
 
             }
         });
-
-        et_noofplants_final.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                String offtypesplants = et_ooftypes.getText().toString().trim();
-                String femaleplants = et_femaleplants.getText().toString().trim();
-                String maleplants = et_maleplants.getText().toString().trim();
-                String noofplants_final = String.valueOf(charSequence);
-                if (!noofplants_final.equals("") && !noofplants_final.equals("0") && !offtypesplants.equals("") && !femaleplants.equals("") && !maleplants.equals("")) {
-                    float offtypesplants1 = Float.parseFloat(offtypesplants);
-                    float femaleplants1 = Float.parseFloat(femaleplants);
-                    float maleplants1 = Float.parseFloat(maleplants);
-                    float noofplants_final1 = Float.parseFloat(noofplants_final);
-                    float offtypesplantper = (offtypesplants1 * 100) / noofplants_final1;
-                    //int perround = Math.round(normalmeanper);
-                    float total = offtypesplants1+femaleplants1+maleplants1;
-                    float totalper = (total * 100) / noofplants_final1;
-                    et_per_ooftypes.setText(form.format(offtypesplantper));
-                    et_totalplants.setText(String.valueOf(total));
-                    et_per_totalplants.setText(String.valueOf(totalper));
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
-
         btn_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String obrdatefinal = et_obrdatefinal.getText().toString().trim();
                 String noofplants_final = et_noofplants_final.getText().toString().trim();
+                String selfplants = et_selfplants.getText().toString().trim();
                 String maleplants = et_maleplants.getText().toString().trim();
-                String femaleplants = et_femaleplants.getText().toString().trim();
                 String offtypesplants = et_ooftypes.getText().toString().trim();
-                String totalplants = et_totalplants.getText().toString().trim();
-                String per_maleplants = et_per_maleplants.getText().toString().trim();
-                String per_femaleplants = et_per_femaleplants.getText().toString().trim();
-                String blinepollen = et_blinepollen.getText().toString().trim();
-                String per_blinepollen = et_per_blinepollen.getText().toString().trim();
+                String pencilplants = et_pencilplants.getText().toString().trim();
+                String total = et_total.getText().toString().trim();
+                String per_Selfplants = et_per_Selfplants.getText().toString().trim();
+                String per_femaleplants = et_per_maleplants.getText().toString().trim();
                 String per_ooftypes = et_per_ooftypes.getText().toString().trim();
-                String per_totalplants = et_per_totalplants.getText().toString().trim();
+                String per_pencilplants = et_per_pencilplants.getText().toString().trim();
+                String per_total = et_per_total.getText().toString().trim();
                 String remark = et_remark.getText().toString().trim();
                 String retest_reason = et_retest_reason.getText().toString().trim();
                 int rdsample = radiosample.getCheckedRadioButtonId();
@@ -309,7 +274,7 @@ public class GOTFinalSubmitActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Enter Re-Test Reason", Toast.LENGTH_LONG).show();
                     }else {
                         retest = "Yes";
-                        confirmAlertSubmit(obrdatefinal,noofplants_final,maleplants,femaleplants,offtypesplants,totalplants,per_maleplants,per_femaleplants,per_ooftypes,per_totalplants,remark,retest_reason,retest,retesttype,blinepollen,per_blinepollen);
+                        confirmAlertSubmit(obrdatefinal,noofplants_final,selfplants,maleplants,offtypesplants,pencilplants,total,per_Selfplants,per_femaleplants,per_ooftypes,per_pencilplants,per_total,remark,retest_reason,retest,retesttype);
                         //updateTransplantingData(plotno,bedno,noofrows,sowingdate,direction,location_nursery,retest_reason,state,noofplants,retest,range);
                     }
                 } else {
@@ -318,14 +283,16 @@ public class GOTFinalSubmitActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Select Observatin Date", Toast.LENGTH_LONG).show();
                     }else if (noofplants_final.equalsIgnoreCase("")){
                         Toast.makeText(getApplicationContext(), "Enter No. of Plants", Toast.LENGTH_LONG).show();
+                    }else if (selfplants.equalsIgnoreCase("")){
+                        Toast.makeText(getApplicationContext(), "Enter No. of Self Plant", Toast.LENGTH_LONG).show();
                     }else if (maleplants.equalsIgnoreCase("")){
                         Toast.makeText(getApplicationContext(), "Enter No. of Male Plants", Toast.LENGTH_LONG).show();
-                    }else if (femaleplants.equalsIgnoreCase("")){
-                        Toast.makeText(getApplicationContext(), "Enter No. of Female Plants", Toast.LENGTH_LONG).show();
                     }else if (offtypesplants.equalsIgnoreCase("")){
                         Toast.makeText(getApplicationContext(), "Enter No. of Off Type Plants", Toast.LENGTH_LONG).show();
+                    }else if (pencilplants.equalsIgnoreCase("")){
+                        Toast.makeText(getApplicationContext(), "Enter No. of Pencil Plants", Toast.LENGTH_LONG).show();
                     }else {
-                        confirmAlertSubmit(obrdatefinal,noofplants_final,maleplants,femaleplants,offtypesplants,totalplants,per_maleplants,per_femaleplants,per_ooftypes,per_totalplants,remark,retest_reason,retest,retesttype,blinepollen,per_blinepollen);
+                        confirmAlertSubmit(obrdatefinal,noofplants_final,selfplants,maleplants,offtypesplants,pencilplants,total,per_Selfplants,per_femaleplants,per_ooftypes,per_pencilplants,per_total,remark,retest_reason,retest,retesttype);
                         //updateTransplantingData(noofseeds_direct,plotno,bedno,noofrows,sowingdate,direction,location_nursery,methodofsowing,retest_reason,noofcells,nooftrey,state,noofplants,retest);
                     }
                 }
@@ -333,9 +300,8 @@ public class GOTFinalSubmitActivity extends AppCompatActivity {
         });
     }
 
-    @SuppressLint("SetTextI18n")
-    private void confirmAlertSubmit(String obrdatefinal, String noofplants_final, String maleplants, String femaleplants, String offtypesplants, String totalplants, String per_maleplants, String per_femaleplants, String per_ooftypes, String per_totalplants, String remark, String retest_reason, String retest, String retesttype, String blinepollen, String per_blinepollen) {
-        final Dialog dialog = new Dialog(GOTFinalSubmitActivity.this);
+    private void confirmAlertSubmit(final String obrdatefinal, final String noofplants_final, final String selfplants, final String maleplants, final String offtypesplants, final String pencilplants, final String total, final String per_selfplants, final String per_femaleplants, final String per_ooftypes, final String per_pencilplants, final String per_total, final String remark, final String retest_reason, final String retest, final String retesttype) {
+        final Dialog dialog = new Dialog(GOTMaizeFinalSubmitActivity.this);
         dialog.setContentView(R.layout.custom_confirmalert);
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
         lp.copyFrom(dialog.getWindow().getAttributes());
@@ -363,12 +329,12 @@ public class GOTFinalSubmitActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
-                updateFinalObservationData(obrdatefinal,noofplants_final,maleplants,femaleplants,offtypesplants,totalplants,per_maleplants,per_femaleplants,per_ooftypes,per_totalplants,remark,retest_reason,retest,retesttype,blinepollen,per_blinepollen);
+                updateFinalObservationData(obrdatefinal,noofplants_final,selfplants,maleplants,offtypesplants,pencilplants,total,per_selfplants,per_femaleplants,per_ooftypes,per_pencilplants,per_total,remark,retest_reason,retest,retesttype);
             }
         });
     }
 
-    private void updateFinalObservationData(String obrdatefinal, String noofplants_final, String maleplants, String femaleplants, String offtypesplants, String totalplants, String per_maleplants, String per_femaleplants, String per_ooftypes, String per_totalplants, String remark, String retest_reason, String retest, String retesttype, String blinepollen, String per_blinepollen) {
+    private void updateFinalObservationData(String obrdatefinal, String noofplants_final, String selfplants, String maleplants, String offtypesplants, String pencilplants, String total, String per_selfplants, String per_maleplants, String per_ooftypes, String per_pencilplants, String per_total, String remark, String retest_reason, String retest, String retesttype) {
         final ProgressDialog pDialog = new ProgressDialog(this);
         pDialog.setMessage("Processing...");
         pDialog.show();
@@ -384,20 +350,20 @@ public class GOTFinalSubmitActivity extends AppCompatActivity {
         params.put("fnobser_noofplants", noofplants_final);
         params.put("fnobser_maleplants", maleplants);
         params.put("fnobser_maleper", per_maleplants);
-        params.put("fnobser_femaleplants", femaleplants);
-        params.put("fnobser_femaleper", per_femaleplants);
-        params.put("fnobser_total", totalplants);
-        params.put("fnobser_totalper", per_totalplants);
+        params.put("fnobser_femaleplants", "");
+        params.put("fnobser_femaleper", "");
+        params.put("fnobser_total", "");
+        params.put("fnobser_totalper", "");
         params.put("fnobser_otherofftype", offtypesplants);
         params.put("fnobser_otheroffper", per_ooftypes);
-        params.put("fnobser_blineps", blinepollen);
-        params.put("fnobser_blinepsper", per_blinepollen);
-        params.put("fnobser_totalofftype", "");
-        params.put("fnobser_totalofftypeper", "");
-        params.put("fnobser_self", "");
-        params.put("fnobser_selfper", "");
-        params.put("fnobser_pencilplants", "");
-        params.put("fnobser_pencilplantsper", "");
+        params.put("fnobser_blineps", "");
+        params.put("fnobser_blinepsper", "");
+        params.put("fnobser_totalofftype", total);
+        params.put("fnobser_totalofftypeper", per_total);
+        params.put("fnobser_self", selfplants);
+        params.put("fnobser_selfper", per_selfplants);
+        params.put("fnobser_pencilplants", pencilplants);
+        params.put("fnobser_pencilplantsper", per_pencilplants);
         params.put("fnobser_aline", "");
         params.put("fnobser_alineper", "");
         params.put("fnobser_blinesh", "");
@@ -425,13 +391,13 @@ public class GOTFinalSubmitActivity extends AppCompatActivity {
         params.put("retest", retest);
         params.put("retesttype", retesttype);
 
-        new SendVolleyCall().executeProgram(GOTFinalSubmitActivity.this, AppConfig.SAMPLE_FINALOBRUPDATE_PROGRAM1, params, new volleyCallback() {
+        new SendVolleyCall().executeProgram(GOTMaizeFinalSubmitActivity.this, AppConfig.SAMPLE_FINALOBRUPDATE_PROGRAM1, params, new volleyCallback() {
             @Override
             public void onSuccess(String response) {
                 pDialog.dismiss();
                 String message = JsonParser.getInstance().parseSubmitData(response);
                 if (message.equalsIgnoreCase("Success")){
-                    Intent intent = new Intent(GOTFinalSubmitActivity.this, ReviewAndFinalSubmitActivity.class);
+                    Intent intent = new Intent(GOTMaizeFinalSubmitActivity.this, ReviewAndFinalSubmitActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                     finish();
@@ -476,25 +442,16 @@ public class GOTFinalSubmitActivity extends AppCompatActivity {
                             tv_dosa.setText(details.getString("scdate"));
                             tv_sampleno.setText(details.getString("sampleno"));
 
-                            if (details.getString("crop").equalsIgnoreCase("Bajra Seed")){
-                                et_blinepollen.setText(details.getString("fnobser_blineps"));
-                                et_per_blinepollen.setText(details.getString("fnobser_blinepsper"));
-                                ll_male.setVisibility(View.GONE);
-                                ll_male_per.setVisibility(View.GONE);
-                                ll_bline.setVisibility(View.VISIBLE);
-                                ll_bline_per.setVisibility(View.VISIBLE);
-                            }
-
                             et_obrdatefinal.setText(details.getString("fnobser_obserdate"));
                             et_noofplants_final.setText(details.getString("fnobser_noofplants"));
                             et_maleplants.setText(details.getString("fnobser_maleplants"));
                             et_per_maleplants.setText(details.getString("fnobser_maleper"));
-                            et_femaleplants.setText(details.getString("fnobser_femaleplants"));
-                            et_per_femaleplants.setText(details.getString("fnobser_femaleper"));
+                            et_selfplants.setText(details.getString("fnobser_self"));
+                            et_per_Selfplants.setText(details.getString("fnobser_selfper"));
                             et_ooftypes.setText(details.getString("fnobser_otherofftype"));
                             et_per_ooftypes.setText(details.getString("fnobser_otheroffper"));
-                            et_totalplants.setText(details.getString("fnobser_total"));
-                            et_per_totalplants.setText(details.getString("fnobser_totalper"));
+                            et_pencilplants.setText(details.getString("fnobser_pencilplants"));
+                            et_per_pencilplants.setText(details.getString("fnobser_pencilplantsper"));
                             et_remark.setText(details.getString("fnobser_remarks"));
                             String retestflg = details.getString("retestflg");
 
@@ -543,7 +500,7 @@ public class GOTFinalSubmitActivity extends AppCompatActivity {
 
         // Adding request to request queue
         //AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
-        CommonVolleyCall.getInstance(GOTFinalSubmitActivity.this).addRequestQueue(strReq);
+        CommonVolleyCall.getInstance(GOTMaizeFinalSubmitActivity.this).addRequestQueue(strReq);
     }
 
     public void retest_onClick(View v1)
@@ -559,5 +516,4 @@ public class GOTFinalSubmitActivity extends AppCompatActivity {
             retest = "No";
         }
     }
-
 }
