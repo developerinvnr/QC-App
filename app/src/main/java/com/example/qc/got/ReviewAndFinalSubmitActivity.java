@@ -201,16 +201,28 @@ public class ReviewAndFinalSubmitActivity extends AppCompatActivity implements D
         if (adapterView.getId() == R.id.spinner_state) {
             String state = spinner_state.getSelectedItem().toString().trim();
             if (!state.equalsIgnoreCase("Select")) {
+                locArray.clear();
+                locArray.add(0, "Select");
+                locadapter = Utils.getInstance().spinnerAdapter(ReviewAndFinalSubmitActivity.this, locArray);
+                pendingList.clear();
+                spinner_location.setAdapter(locadapter);
+                locadapter.notifyDataSetChanged();
                 getLocationList(state);
             } else {
                 locArray.clear();
-                locArray.add("Select");
+                locArray.add(0, "Select");
+                locadapter = Utils.getInstance().spinnerAdapter(ReviewAndFinalSubmitActivity.this, locArray);
+                pendingList.clear();
+                spinner_location.setAdapter(locadapter);
                 locadapter.notifyDataSetChanged();
             }
         } else if (adapterView.getId() == R.id.spinner_location) {
             String state = spinner_state.getSelectedItem().toString().trim();
             String location = spinner_location.getSelectedItem().toString().trim();
             if (!location.equalsIgnoreCase("Select")) {
+                pendingList.clear();
+                adapter.notifyDataSetChanged();
+                recycler_view.setAdapter(adapter);
                 getPendingList(userid,state,location);
             } else {
                 pendingList.clear();
@@ -302,6 +314,5 @@ public class ReviewAndFinalSubmitActivity extends AppCompatActivity implements D
             startActivity(intent);
             finish();
         }
-
     }
 }

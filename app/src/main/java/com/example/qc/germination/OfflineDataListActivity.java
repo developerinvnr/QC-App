@@ -172,9 +172,9 @@ public class OfflineDataListActivity extends AppCompatActivity {
     private void getOfflinePendingList() {
         //transactionObj = dbobj.getTransactioList();
         pendingList.clear();
-        List<OfflineDataListPojo> data = dbobj.getTransactioList();
+        //List<OfflineDataListPojo> data = dbobj.getTransactioList();
         pendingList.addAll(dbobj.getTransactioList());
-        Log.e("pendingList", data.toString());
+        //Log.e("pendingList", data.toString());
         adapter.notifyDataSetChanged();
     }
 

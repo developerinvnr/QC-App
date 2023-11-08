@@ -486,7 +486,7 @@ public class ImageUploadActivity extends AppCompatActivity {
     public String saveImage(Bitmap myBitmap) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         myBitmap.compress(Bitmap.CompressFormat.JPEG, 25, bytes);
-        File wallpaperDirectory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/Samadhaan/");
+        File wallpaperDirectory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/qc/");
         wallpaperDirectory.mkdirs();
 
         // have the object build the directory structure, if needed.

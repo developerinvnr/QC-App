@@ -57,6 +57,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -167,6 +169,7 @@ public class OfflineFGTDataUpdateActivity extends AppCompatActivity {
     private LinearLayout ll_block5678;
     private TextView tv_doe;
     private byte[] byteArray;
+    private String currentdate;
 
 
     @Override
@@ -295,9 +298,9 @@ public class OfflineFGTDataUpdateActivity extends AppCompatActivity {
         ll_techremark.setVisibility(View.VISIBLE);
 
         //sampleno = getIntent().getStringExtra("sampleno");
-        String sampleno = SharedPreferences.getInstance().getString(SharedPreferences.KEY_SAMPLENO);
+        sampleno = SharedPreferences.getInstance().getString(SharedPreferences.KEY_SAMPLENO);
         row = dbobj.getSampleDetails(sampleno);
-        String currentdate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
+        currentdate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
         tv_doe.setText(currentdate);
 
         if (row!=null) {
@@ -1401,6 +1404,15 @@ public class OfflineFGTDataUpdateActivity extends AppCompatActivity {
         //Log.e(TAG, String.valueOf(image_uri));
         path_billcopy = getPath(image_uri);
         //mArrayUri.add(image_uri);
+        Bitmap bm = null;
+        try {
+            bm = MediaStore.Images.Media.getBitmap(this.getContentResolver(), image_uri);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        assert bm != null;
+        String absolutePath = saveImage(bm);
         list.add(prepareFilePart("image", Uri.parse(path_billcopy)));
 
         InputStream iStream = null;
@@ -1463,8 +1475,8 @@ public class OfflineFGTDataUpdateActivity extends AppCompatActivity {
 
     public String saveImage(Bitmap myBitmap) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        myBitmap.compress(Bitmap.CompressFormat.JPEG, 25, bytes);
-        File wallpaperDirectory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/Samadhaan/");
+        myBitmap.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
+        File wallpaperDirectory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"/fgtimages/"+currentdate);
         wallpaperDirectory.mkdirs();
 
         // have the object build the directory structure, if needed.
@@ -1473,8 +1485,7 @@ public class OfflineFGTDataUpdateActivity extends AppCompatActivity {
         }
 
         try {
-
-            BILL_COPY = new File(wallpaperDirectory, Calendar.getInstance().getTimeInMillis() + ".jpg");
+            BILL_COPY = new File(wallpaperDirectory, sampleno + ".jpg");
             BILL_COPY.createNewFile();
             FileOutputStream fo = new FileOutputStream(BILL_COPY);
             fo.write(bytes.toByteArray());
