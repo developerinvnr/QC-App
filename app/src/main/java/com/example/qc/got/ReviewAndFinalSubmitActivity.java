@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -22,13 +23,10 @@ import android.widget.Toast;
 import com.example.qc.MainActivity;
 import com.example.qc.R;
 import com.example.qc.adapter.DataReviewAdapter;
-import com.example.qc.adapter.ReportSummeryAdapter;
 import com.example.qc.germination.GerminationHomeActivity;
 import com.example.qc.germination.GerminationReadingFormActivity;
-import com.example.qc.germination.GerminationSetupActivity;
 import com.example.qc.parser.JsonParser;
-import com.example.qc.parser.germpsampleinfo.GermpSampleInfoResponse;
-import com.example.qc.parser.germpsampleinfo.Samplegemparray;
+import com.example.qc.parser.SubmitSuccessResponse;
 import com.example.qc.parser.gotpendinglist.GOTPendingList;
 import com.example.qc.parser.gotpendinglist.Samparray;
 import com.example.qc.retrofit.ApiInterface;
@@ -39,10 +37,12 @@ import com.example.qc.utils.Utils;
 import com.example.qc.volley.SendVolleyCall;
 import com.example.qc.volley.volleyCallback;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,6 +69,9 @@ public class ReviewAndFinalSubmitActivity extends AppCompatActivity implements D
 
     private DataReviewAdapter.DataReviewAdapterListener listener;
 
+    List<String> sampleArray = new ArrayList<>();
+    private Button btn_submit;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,6 +90,7 @@ public class ReviewAndFinalSubmitActivity extends AppCompatActivity implements D
         recycler_view = findViewById(R.id.recycler_view);
         spinner_location = findViewById(R.id.spinner_location);
         spinner_state = findViewById(R.id.spinner_state);
+        btn_submit = findViewById(R.id.btn_submit);
 
         stateArray = new ArrayList<>();
         stateArray.add(0, "Select");
@@ -117,6 +121,18 @@ public class ReviewAndFinalSubmitActivity extends AppCompatActivity implements D
             }
         });
 
+        btn_submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (sampleArray.isEmpty()){
+                    Toast.makeText(ReviewAndFinalSubmitActivity.this, "Select samples", Toast.LENGTH_SHORT).show();
+                }else {
+                    updateReviewData();
+
+                }
+            }
+        });
+
         userid = SharedPreferences.getInstance().getString(SharedPreferences.KEY_MOBILE1);
         Log.e("UserId", userid);
 
@@ -125,6 +141,64 @@ public class ReviewAndFinalSubmitActivity extends AppCompatActivity implements D
 
         spinner_state.setOnItemSelectedListener(ReviewAndFinalSubmitActivity.this);
         spinner_location.setOnItemSelectedListener(ReviewAndFinalSubmitActivity.this);
+    }
+
+    private void updateReviewData() {
+
+        StringBuilder sampleString = new StringBuilder();
+        for(int i=0;i<sampleArray.size();i++){
+            sampleString.append(sampleArray.get(i));
+            if (i != sampleArray.size() - 1) {
+                sampleString.append(",");
+            }
+        }
+
+        Log.e("JSONArray", String.valueOf(sampleString));
+        ApiInterface apiInterface = RetrofitClient.getRetrofitInstance().create(ApiInterface.class);
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Loading...");
+        progressDialog.show();
+        Call<SubmitSuccessResponse> call =apiInterface.updateGOTReviewData(userid,String.valueOf(sampleString));
+        call.enqueue(new Callback<SubmitSuccessResponse>() {
+            @SuppressLint({"NotifyDataSetChanged", "LongLogTag"})
+            @Override
+            public void onResponse(@NonNull Call<SubmitSuccessResponse> call, @NonNull retrofit2.Response<SubmitSuccessResponse> response) {
+                if (response.isSuccessful()) {
+                    progressDialog.cancel();
+                    Log.e(TAG, "Response : " + response.body());
+                    SubmitSuccessResponse submitSuccessResponse = response.body();
+                    assert submitSuccessResponse != null;
+                    if (submitSuccessResponse.getStatus()){
+                        Toast.makeText(getApplicationContext(), submitSuccessResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(ReviewAndFinalSubmitActivity.this, MainActivity.class);
+                        startActivity(intent);
+                    }else {
+                        Toast.makeText(getApplicationContext(), submitSuccessResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+
+                } else {
+                    progressDialog.cancel();
+                    if (response.errorBody() != null) {
+                        try {
+                            JSONObject jsonObj = new JSONObject(TextStreamsKt.readText(response.errorBody().charStream()));
+                            String msg = jsonObj.getString("message");
+                            Toast.makeText(ReviewAndFinalSubmitActivity.this, msg, Toast.LENGTH_SHORT).show();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(ReviewAndFinalSubmitActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(@NonNull Call<SubmitSuccessResponse> call, @NonNull Throwable t) {
+                progressDialog.cancel();
+                Log.e(TAG, "RetrofitError : " + t.getMessage());
+                Toast.makeText(ReviewAndFinalSubmitActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void getStateList(String userid) {
@@ -237,7 +311,7 @@ public class ReviewAndFinalSubmitActivity extends AppCompatActivity implements D
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Loading...");
         progressDialog.show();
-        Log.e("Params:", userid+"="+location);
+        Log.e("Params:", userid+"="+state+"="+location);
         Call<GOTPendingList> call =apiInterface.getGOTPendingList(userid,state,location);
 
         call.enqueue(new Callback<GOTPendingList>() {
@@ -314,5 +388,15 @@ public class ReviewAndFinalSubmitActivity extends AppCompatActivity implements D
             startActivity(intent);
             finish();
         }
+    }
+
+    public void addSampleDetails(String sampleno, String action) {
+        if (action.equalsIgnoreCase("add")){
+            sampleArray.add(sampleno);
+        }else {
+            sampleArray.remove(sampleno);
+        }
+
+        Log.e("sampleArray", String.valueOf(sampleArray));
     }
 }

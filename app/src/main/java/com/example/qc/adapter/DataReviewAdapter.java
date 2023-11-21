@@ -1,11 +1,13 @@
 package com.example.qc.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -35,8 +37,9 @@ public class DataReviewAdapter extends RecyclerView.Adapter<DataReviewAdapter.My
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         private final LinearLayout ll_main;
-        private final TextView txtsrno,tv_resultDate,tv_sampleno,tv_ppn,tv_female,tv_male,tv_oofType,tv_remark,tv_gpper,tv_view;
+        private final TextView txtsrno,tv_resultDate,tv_sampleno,tv_ppn,tv_female,tv_male,tv_oofType,tv_remark,tv_gpper,tv_view,tv_check;
         private final Button btn_view;
+        private final CheckBox cb_select;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -51,12 +54,16 @@ public class DataReviewAdapter extends RecyclerView.Adapter<DataReviewAdapter.My
             tv_remark = itemView.findViewById(R.id.tv_remark);
             tv_gpper = itemView.findViewById(R.id.tv_gpper);
             tv_view = itemView.findViewById(R.id.tv_view);
+            tv_check = itemView.findViewById(R.id.tv_check);
             btn_view = itemView.findViewById(R.id.btn_view);
+            cb_select = itemView.findViewById(R.id.cb_select);
 
             ll_main.setBackgroundColor(Color.parseColor("#FFFFFF"));
 
             tv_view.setVisibility(View.GONE);
             btn_view.setVisibility(View.VISIBLE);
+            tv_check.setVisibility(View.GONE);
+            cb_select.setVisibility(View.VISIBLE);
 
             /*itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -76,7 +83,7 @@ public class DataReviewAdapter extends RecyclerView.Adapter<DataReviewAdapter.My
     }
 
     @Override
-    public void onBindViewHolder(@NonNull DataReviewAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull DataReviewAdapter.MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
         Samparray data = pendingList.get(position);
         holder.txtsrno.setText(String.valueOf(position+1));
         holder.tv_resultDate.setText(data.getFnobserObserdate());
@@ -91,6 +98,20 @@ public class DataReviewAdapter extends RecyclerView.Adapter<DataReviewAdapter.My
         holder.btn_view.setOnClickListener(view -> {
             index = position;
             ((ReviewAndFinalSubmitActivity) context).viewSampleDetails(pendingList.get(index));
+        });
+
+        holder.cb_select.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String action = "add";
+                if (holder.cb_select.isChecked()){
+                    action = "add";
+                }else {
+                    action = "remove";
+                }
+                index = position;
+                ((ReviewAndFinalSubmitActivity) context).addSampleDetails(pendingList.get(index).getSampleno(),action);
+            }
         });
     }
 
